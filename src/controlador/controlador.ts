@@ -1,32 +1,46 @@
-import type { Pregunta } from '../models/trivia'
+// Asumo que el tipo 'Pregunta' se ha renombrado a 'Question' en '../models/trivia'
+import type { Question } from '../models/trivia'
+// Asumo que el servicio y el archivo se han renombrado
 import { photoService } from '../services/photo_service'
-import { preguntasService } from '../services/pregunta_service'
+import { questionService } from '../services/questions_service'
 
-export interface Controlador {
-    preguntas: Pregunta[],
-    fotosCategorias: Map<string, string>
-    getTodosDatos: () => Promise<void>
-    getCategoriasUnicas: () => string[]
+// Interfaz traducida: Controlador -> Controller
+export interface Controller {
+    // Propiedades traducidas: preguntas -> questions, fotosCategorias -> categoryPhotos
+    questions: Question[],
+    categoryPhotos: Map<string, string>
+    // Métodos traducidos: getTodosDatos -> loadAllData, getCategoriasUnicas -> getUniqueCategories
+    loadAllData: () => Promise<void>
+    getUniqueCategories: () => string[]
 }
-export const controlador: Controlador = {
-    preguntas: [],
-    fotosCategorias: new Map<string, string>(),
-    async getTodosDatos() {
+
+// Objeto traducido: controlador -> controller
+export const controller: Controller = {
+    questions: [],
+    categoryPhotos: new Map<string, string>(),
+
+    async loadAllData() {
         try {
-            const dataTriviaApi:Pregunta[] = await preguntasService.getPreguntas();
-            this.preguntas = dataTriviaApi;
-            const dataPhotoApi:Map<string, string> = await photoService.getPhotosCategories();
-            this.fotosCategorias = dataPhotoApi;
+            // Uso de los tipos y métodos traducidos del servicio
+            const triviaData: Question[] = await questionService.getQuestions();
+            this.questions = triviaData;
+
+            const photoData: Map<string, string> = await photoService.getCategoryPhotos();
+            this.categoryPhotos = photoData;
+
         } catch (error) {
-            console.log(`Ha ocurrido un error al recibir los datos: ${error}`)
+            // Mensaje de error traducido
+            console.log(`An error occurred while receiving data: ${error}`)
         }
     },
-    getCategoriasUnicas() {
-        let categoriasUnicas:string[] = [];
-        this.preguntas.forEach((pregunta) => {
-            if (!categoriasUnicas.includes(pregunta.category.toLowerCase())) categoriasUnicas.push(pregunta.category.toLowerCase());
+
+    getUniqueCategories() {
+        let uniqueCategories: string[] = [];
+
+        // Iteración sobre la lista de preguntas traducida
+        this.questions.forEach((question) => {
+            if (!uniqueCategories.includes(question.category.toLowerCase())) uniqueCategories.push(question.category.toLowerCase());
         })
-        return categoriasUnicas;
+        return uniqueCategories;
     },
 }
-

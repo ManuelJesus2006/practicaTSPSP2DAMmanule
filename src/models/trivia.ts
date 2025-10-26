@@ -1,16 +1,16 @@
 // To parse this data:
 //
-//   import { Convert, PreguntaResponse } from "./file";
+//   import { Converter, QuestionResponse } from "./file";
 //
-//   const preguntaResponse = Convert.toPreguntaResponse(json);
+//   const questionResponse = Converter.toQuestionResponse(json);
 //
 
-export interface PreguntaResponse {
+export interface QuestionResponse {
     response_code: number;
-    preguntas: Pregunta[]; 
+    questions: Question[]; 
 }
 
-export interface Pregunta {
+export interface Question {
     type: Type;
     difficulty: Difficulty;
     category: string;
@@ -25,9 +25,9 @@ export type Type = "boolean" | "multiple";
 
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
-export class Convert {
-    public static toPreguntaResponse(json: string): PreguntaResponse {
-        return cast(JSON.parse(json), r("PreguntaResponse"));
+export class Converter {
+    public static toQuestionResponse(json: string): QuestionResponse {
+        return cast(JSON.parse(json), r("QuestionResponse"));
     }
 }
 
@@ -132,8 +132,8 @@ function transform(val: any, typ: any, getProps: any, key: any = '', parent: any
     if (Array.isArray(typ)) return transformEnum(typ, val);
     if (typeof typ === "object") {
         return typ.hasOwnProperty("unionMembers") ? transformUnion(typ.unionMembers, val)
-            : typ.hasOwnProperty("arrayItems")      ? transformArray(typ.arrayItems, val)
-            : typ.hasOwnProperty("props")           ? transformObject(getProps(typ), typ.additional, val)
+            : typ.hasOwnProperty("arrayItems")      ? transformArray(typ.arrayItems, val)
+            : typ.hasOwnProperty("props")           ? transformObject(getProps(typ), typ.additional, val)
             : invalidValue(typ, val, key, parent);
     }
     if (typ === Date && typeof val !== "number") return transformDate(val);
@@ -161,11 +161,11 @@ function o(props: any[], additional: any) {
 }
 
 const typeMap: any = {
-    "PreguntaResponse": o([
+    "QuestionResponse": o([
         { json: "response_code", js: "response_code", typ: 0 },
-        { json: "results", js: "preguntas", typ: a(r("Pregunta")) }, // ¡CORRECCIÓN CLAVE!
+        { json: "results", js: "questions", typ: a(r("Question")) },
     ], false),
-    "Pregunta": o([
+    "Question": o([
         { json: "type", js: "type", typ: r("Type") },
         { json: "difficulty", js: "difficulty", typ: r("Difficulty") },
         { json: "category", js: "category", typ: "" },

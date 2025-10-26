@@ -199,3 +199,37 @@ body > button {
     margin-top: 20px;
     transition: background-color 0.3s ease;
 }
+
+/* ======================================= */
+/* 6. Media Queries (Para Móviles) */
+/* ======================================= */
+
+@media (max-width: 600px) {
+    
+    /* En pantallas muy pequeñas, apilamos los botones de navegación */
+    nav ul {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    /* Hacemos que los botones ocupen todo el ancho para facilitar el toque */
+    nav button {
+        width: 100%;
+    }
+
+    /* Apilamos los elementos del formulario (select y botón) */
+    form {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    select {
+        width: 100%;
+        min-width: unset; /* Quita la restricción de ancho mínimo */
+    }
+
+    /* Asegura que el contenedor de preguntas no tenga tanto relleno horizontal */
+    .question {
+        padding: 15px;
+    }
+}
